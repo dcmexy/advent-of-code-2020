@@ -1,36 +1,60 @@
-
+data = [0]
 # Solve part 1
 
 
-def processAdapters(data):
+def processAdapters():
     prev = 0
 
     # captures diffs for 1-jolt, and 3-jolts
-    diffs = [0, 0]
-    for i in data:
+    diffs = [0, 0, 0]
+    skips = []
+    bigData = []
 
-        if i - prev > 3:
+    prev
+    for i in range(len(data)):
+
+        if data[i] - prev > 3:
             break
-        if i - prev == 1:
+
+        # Track differences
+        if data[i] - prev == 1:
             diffs[0] += 1
-        if i - prev == 3:
+        if data[i] - prev == 2:
             diffs[1] += 1
-        prev = i
+        if data[i] - prev == 3:
+            diffs[2] += 1
+        prev = data[i]
 
-    # Add built in adapter
-    diffs[1] += 1
-
-    # return diff for 1-jolt * diffs for 3-jolts
-    return diffs[0] * diffs[1]
+    return diffs[0] * diffs[2]
 
 
-# Read data from file
+def calculateArrangement(count=0):
+    val = 0
+    visited = {}
+
+    if count + 1 == len(data):
+        return 1
+
+    if count in visited:
+        return visited[count]
+
+    for i in range(count + 1, len(data)):
+        if data[i] - data[count] <= 3:
+            val += calculateArrangement(i)
+    visited[count] = val
+    return val
+
+
+    # Read data from file
 with open('input.txt') as f:
-    data = []
     for line in f:
         data.append(int(line.strip()))
 
     # Sort data
     data.sort()
 
-    print("Part 1 =", processAdapters(data))
+    # Add built in adapter
+    data.append(max(data) + 3)
+
+    print("Part 1 =", processAdapters())
+    print("Part 2 =", calculateArrangement())
